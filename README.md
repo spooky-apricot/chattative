@@ -1,2 +1,2 @@
 # chattative
-social media project
+social media project by Dan and Lily
