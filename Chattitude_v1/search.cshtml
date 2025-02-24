@@ -1,0 +1,57 @@
+﻿@using Chattitude_v1.Code
+@using LibChat
+@{
+    Page.Title = "Search";
+    Layout = "~/Shared/_Layout1.cshtml";
+    PageData["Page"] = EnumPage.search;
+
+    CUser user = (CUser)Session["user"];
+    List<string[]> matches = new List<string[]>();
+
+    if (user == null)
+    {
+        Response.Redirect("welcome.cshtml");
+    }
+    if (IsPost && Request["btnSearch"] != null)
+    {
+        string searchQuery = Request["txtSearchBox"];
+        matches = user.SearchUser(searchQuery);
+    }
+    else if (IsPost && Request["btnAddFriend"] != null)
+    {
+        string strFriendID = Request["btnAddFriend"];
+        long friendID = strFriendID.AsInt();
+        user.AddFriend(friendID);
+    }
+
+}
+
+<form method="post">
+    <input type="text" name="txtSearchBox" value="" placeholder="Search for friends." />
+    <button type="submit" name="btnSearch">Search</button>
+</form>
+
+<form method="post">
+    @foreach (var match in matches)
+    {
+        <p>@match[1]</p>
+        if (user.FriendsList().Any(friend => friend[0] == match[0]))
+        {
+            <button value="@match[0]">(Already Friends)</button>
+        }
+        else
+        {
+            <button value="@match[0]" name="btnAddFriend">Send Friend Request</button>
+        }
+        <br /><br />
+    }
+
+</form>
+
+
+
+
+
+
+
+

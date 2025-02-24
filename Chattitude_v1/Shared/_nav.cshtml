@@ -1,0 +1,19 @@
+﻿@using Chattitude_v1.Code
+<nav class="nav_links">
+    <!-- Start from first enum and loop until last. (First webpage to last webpage). -->
+    <!-- 'page' substitutes the Enum values. -->
+    @for (EnumPage page = EnumPage.index; page <= EnumPage.settings; page++)
+    {
+        string url = $"{page}.cshtml";
+        string link_name = page.ToString().Replace("_", " ");
+        if (PageData["Page"] == page)
+        {
+            <a class="active_nav" href=@url>@link_name</a>
+        }
+        else
+        {
+            <a href=@url>@link_name</a>
+        }
+    }
+</nav>
+

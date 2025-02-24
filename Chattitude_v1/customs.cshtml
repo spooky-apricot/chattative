@@ -1,0 +1,201 @@
+﻿@using Chattitude_v1.Code
+@using LibChat
+@{
+    Page.Title = "Customs";
+    Layout = "~/Shared/_Layout1.cshtml";
+    PageData["Page"] = EnumPage.customs;
+
+    CUser user = (CUser)Session["user"];
+
+    List<string[]> unlocked_themes = new List<string[]>();
+    unlocked_themes = user.GetThemes();
+
+    if (IsPost && Request["btnSubmitCustom"] != null)
+    {
+        user.BGroundColour = Request["optBGroundColour"];
+        user.Colour = Request["optColour"];
+        user.FontColour = Request["optFontColour"];
+        user.BorderWidth = Request["optBorderWidth"];
+        user.Padding = Request["optPadding"];
+        user.BorderColour = Request["optBorderColour"];
+
+        user.SaveCustom(true, user.BorderColour, user.BorderWidth, user.BGroundColour, user.FontStyle, user.FontColour, user.Padding);
+
+        Session["user"] = user;
+        Response.Redirect("/homepage.cshtml"); // Direct to homepage to display new post theme.
+    }
+}
+
+<div>
+    <p>Your Customs!</p>
+</div>
+
+<br>
+<br>
+
+<form method="post">
+    <fieldset>
+        <legend>Background Colors</legend>
+        <ul>
+            @foreach (var theme in unlocked_themes)
+            {
+                if (theme[2] == "backgroundcolor")
+                {
+                    <li>
+                        <label for="optBGroundColour">Equip background: @theme[0]</label>
+                        <input type="radio" required name="optBGroundColour" value="@theme[0]">
+                    </li>
+                }
+            }
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Colors</legend>
+        <ul>
+            @foreach (var theme in unlocked_themes)
+            {
+                if (theme[2] == "color")
+                {
+                    <li class="blue-box">
+                        <label for="optColour">Equip colour: @theme[0]</label>
+                        <input type="radio" required name="optColour" value="@theme[0]">
+                    </li>
+                }
+            }
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Font Colors</legend>
+        <ul>
+            @foreach (var theme in unlocked_themes)
+            {
+                if (theme[2] == "fontcolor")
+                {
+                    <li class="red-box">
+                        <label for="optFontColour">Equip font colour: @theme[0]</label>
+                        <input type="radio" required name="optFontColour" value="@theme[0]">
+                    </li>
+                }
+            }
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Border Widths</legend>
+        <ul>
+            @foreach (var theme in unlocked_themes)
+            {
+                if (theme[2] == "borderwidth")
+                {
+                    <li class="black-box">
+                        <label for="optBorderWidth">Equip border width: @theme[0]</label>
+                        <input type="radio" required name="optBorderWidth" value="@theme[0]">
+                    </li>
+                }
+            }
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Paddings</legend>
+        <ul>
+            @foreach (var theme in unlocked_themes)
+            {
+                if (theme[2] == "padding")
+                {
+                    <li class="yellow-box">
+                        <label for="optPadding">Equip padding: @theme[0]</label>
+                        <input type="radio" required name="optPadding" value="@theme[0]">
+                    </li>
+                }
+            }
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Border Colors</legend>
+        <ul>
+            @foreach (var theme in unlocked_themes)
+            {
+                if (theme[2] == "bordercolor")
+                {
+                    <li class="yellow-box">
+                        <label for="optBorderColour">Equip border colour: @theme[0]</label>
+                        <input type="radio" required name="optBorderColour" value="@theme[0]">
+                    </li>
+                }
+            }
+        </ul>
+    </fieldset>
+
+    <button type="submit" name="btnSubmitCustom">Confirm Selection</button>
+</form>
+
+
+
+
+
+
+
+
+
+
+@*  <form method="post">
+        <fieldset>
+            <ul>
+                @foreach (var theme in unlocked_themes) // Populate unlocked customs...
+                {
+                    if (theme[2] == "backgroundcolor")
+                    {
+                        <li>
+                            <label for="optBGroundColour">Equip background: @theme[0]</label>
+                            <input type="radio" required name="optBGroundColour" value="@theme[0]">
+                        </li>
+                    }
+
+                    else if (theme[2] == "color")
+                    {
+                        <li class="blue-box">
+                            <label for="optColour">Equip colour: @theme[0]</label>
+                            <input type="radio" required name="optColour" value="@theme[0]">
+                        </li>
+                    }
+                    else if (theme[2] == "fontcolor")
+                    {
+                        <li class="red-box">
+                            <label for="optFontColour">Equip font colour: @theme[0]</label>
+                            <input type="radio" required name="optFontColour" value="@theme[0]">
+                        </li>
+                    }
+                    else if (theme[2] == "borderwidth")
+                    {
+                        <li class="black-box">
+                            <label for="optBorderWidth">Equip border width: @theme[0]</label>
+                            <input type="radio" required name="optBorderWidth" value="@theme[0]">
+                        </li>
+                    }
+                    else if (theme[2] == "padding")
+                    {
+                        <li class="yellow-box">
+                            <label for="optPadding">Equip padding: @theme[0]</label>
+                            <input type="radio" required name="optPadding" value="@theme[0]">
+                        </li>
+                    }
+                    else if (theme[2] == "bordercolor")
+                    {
+                        <li class="yellow-box">
+                            <label for="optBorderColour">Equip border colour: @theme[0]</label>
+                            <input type="radio" required name="optBorderColour" value="@theme[0]">
+                        </li>
+                    }
+
+
+                }
+
+
+            </ul>
+            <button type="submit" name="btnSubmitCustom">Confirm Selection</button>
+    </form>
+*@

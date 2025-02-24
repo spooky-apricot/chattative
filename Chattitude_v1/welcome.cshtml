@@ -1,0 +1,64 @@
+﻿@using LibChat;
+
+@{ 
+    Page.Title = "Chattative";
+    Layout = "~/Shared/_Layout1.cshtml";
+
+    if (IsPost && Request["btnRegister"] != null) // When login button is pressed.
+    {
+        CUser regAttempt = new CUser();
+        regAttempt.UserName = Request["txtUserName"];
+        regAttempt.Password = Request["txtPassword"];
+        if (regAttempt.Create()) // True upon successful registration
+        {
+
+        }
+        else
+        {
+            // Display an error message
+        }
+
+
+        // Account created
+    }
+    else if (IsPost && Request["btnLogin"] != null)
+    {
+        CUser user = new CUser();
+        user.UserName = Request["txtUserName"];
+        user.Password = Request["txtPassword"];
+        user.Login();
+        if (user.ID != 0) // successful login...
+        {
+            Session["user"] = user; // Save, otherwise user disappears over redirect.
+
+            Response.Redirect("index.cshtml");
+        }
+        else
+        {
+            // error message. ID stays at 0.
+        }
+
+
+
+
+    }
+
+
+}
+
+
+<div>
+    <p>~~@Page.Title~~</p>
+
+
+    <form method="post">
+        <input type="text" name="txtUserName" id="txtUserName" value="" />
+        <input type="password" name="txtPassword" id="txtPassword" value="" />
+
+        <!-- Login button directs to home page after credentials checked. -->
+        <button type="submit" name="btnRegister">Register</button>
+
+        <button type="submit" name="btnLogin">Login</button>
+    </form>
+</div>
+

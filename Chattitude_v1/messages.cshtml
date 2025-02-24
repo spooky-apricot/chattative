@@ -1,0 +1,55 @@
+﻿@using Chattitude_v1.Code
+@using LibChat
+@{
+    Page.Title = "Messages";
+    Layout = "~/Shared/_Layout1.cshtml";
+    PageData["Page"] = EnumPage.messages;
+
+    CUser user = (CUser)Session["user"];
+    List<string[]> message = new List<string[]>();
+    if (user != null)
+    {
+        message = user.GetMessages();
+
+        if (IsPost && Request["btnSendMessage"] != null)
+        {
+            string receiverName = Request["txtReceiverName"];
+            string messageToSend = Request["txtMessage"];
+
+            user.Send(receiverName, messageToSend);
+        }
+        else if (IsPost && Request["btnFriendReq"] != null)
+        {
+            string receiverName = Request["txtReceiverName"];
+            user.SendFriend(receiverName);
+        }
+    }
+
+
+}
+
+<div>
+    <p>Welcome to your messages!</p>
+</div>
+
+<p>Send a message</p>
+<form method="post">
+    <input type="text" name="txtReceiverName" placeholder="To:" />
+    <input type="text" name="txtMessage" placeholder="..." />
+    <input type="submit" name="btnSendMessage" value="Send Message" />
+    <input type="submit" name="btnFriendReq" value="Send Friend Request" />
+</form>
+
+<br><br>
+
+<p>Your messages</p>
+@foreach (var msg in message) // Loop through each component of the list. There are 2 components to 
+{                             // each component / list entry (0. message, 1. timestamp). 
+    <tr>
+        <td>@msg[0]</td>
+        <td>@msg[1]</td>
+    </tr>
+    <br>
+}
+
+

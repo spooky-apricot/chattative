@@ -1,0 +1,117 @@
+﻿<!-- Home page is for logged in users only. -->
+@using Chattitude_v1.Code
+@using LibChat
+@using System.Data;
+
+@{
+    Page.Title = "Index";
+    Layout = "~/Shared/_Layout1.cshtml";
+    // Page variable to be used on every page, content inside releveant to each page.
+    PageData["Page"] = EnumPage.index;
+
+    CUser user = (CUser) Session["user"];
+    DataTable table = new DataTable();
+    if (IsPost && Request["btnCreateMore"] != null)
+    {
+        Session["user"] = user; // Save, otherwise user disappears over redirect.
+        Response.Redirect("user_setup.cshtml");
+    }
+    else if (IsPost && Request["btnLogout"] != null)
+    {
+        Session["user"] = null;
+        Response.Redirect("welcome.cshtml");
+    }
+    if (user != null)
+    {
+        Response.Write($"Welcome {user.UserName}.");
+
+        CGuyGal guyGal = new CGuyGal();
+        // Now they are logged in, search user's linked (FK) guyGals via their user ID.
+        /*List<string> users_pets = guyGal.Search(user.ID);
+        if (users_pets.Count == 0)
+        {
+            Response.Redirect("user_setup.cshtml");
+        }
+        else
+        {
+            <p>
+                @foreach (string item in users_pets)
+                {
+
+                }
+            </p>
+
+        }*/
+        table = guyGal.Search(user.ID);
+        if (table.Rows.Count == 0) // They have no pets. Redirect to pet creation page...
+        {
+            Session["guyGal"] = guyGal; // Empty atm...
+            Response.Redirect("user_setup.cshtml"); // Redirect to create pet.
+        }
+        else // Else there are existing pets, so save each...
+        {
+            //for each DB CGuyGal.... display...
+
+
+
+            //Session["guyGal"] = guyGal;
+        }
+
+    }
+    else
+    {
+        Response.Redirect("welcome.cshtml");  // Redirect to login if session is empty
+    }
+
+
+
+
+}
+
+<div>
+    <h1>Chattative</h1>
+    <p>@DateTime.Today.ToShortDateString()</p>
+
+    <p>
+        ~~Chattative~~
+    </p>
+
+    <br /><br />
+    <!-- Have all the user's guys / gals appear here.  -->
+
+    <table>
+        <thead>
+            <tr>
+                @foreach (DataColumn column in table.Columns)
+                {
+                    <th>@column.ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in table.Rows)
+            {
+                <tr>
+                    @foreach (DataColumn rowColumn in table.Columns)
+                    {
+                        <td>@row[rowColumn]</td>
+                    }
+                </tr>
+            }
+            <tr>
+                <td>
+                    <form method="post">
+                        <input type="submit" name="btnCreateMore"
+                               id="btnCreateMore" value="Create More" />
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form method="post">
+        <input type="submit" name="btnLogout" value="Logout" />
+    </form>
+
+</div>
+

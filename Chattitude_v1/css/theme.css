@@ -1,0 +1,49 @@
+﻿p {
+    border: 2px solid black;
+}
+
+.nav_links {
+    color: aqua;
+    background-color: blueviolet;
+}
+
+    .active_nav {
+    background-color: black;
+    border: 1px black;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.user-post-base {
+    margin: 1.5% auto;
+    width: 65%;
+    height: 20%;
+}
+
+.user-post-default {
+    margin: 1.5% auto;
+    width: 65%;
+    height: 20%;
+    background-color: bisque;
+    padding: 2%;
+    border: 2px aquamarine;
+}
+
+.blue-box {
+    border: 2px solid blue;
+}
+
+.red-box {
+    border: 2px solid red;
+}
+
+.black-box {
+    border: 2px solid black;
+}
+
+.yellow-box {
+    border: 2px solid yellow;
+}

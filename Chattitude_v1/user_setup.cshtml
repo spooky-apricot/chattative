@@ -1,0 +1,55 @@
+﻿@using LibChat
+@{
+    Page.Title = "User Setup";
+    Layout = "~/Shared/_Layout1.cshtml";
+
+    string referrer = Request.UrlReferrer?.ToString();
+    if (IsPost && referrer.Contains("~/home.cshtml")) // If we came from home page.
+    {
+        CGuyGal guyGal = (CGuyGal)Session["guyGal"];
+        CUser user = (CUser)Session["user"];
+
+    }
+    if (IsPost && Request["btnCreate"] != null)
+    {
+        CGuyGal guyGal = (CGuyGal) Session["guyGal"];
+        CUser user = (CUser) Session["user"];
+
+        guyGal.FirstName = Request["txtFirstName"];
+        guyGal.LastName = Request["txtLastName"];
+        guyGal.SkinColour = Request["options"];
+        guyGal.Age = byte.Parse(Request["numAge"]);
+        guyGal.Create(user.ID);
+        Session["guyGal"] = guyGal;
+
+        Response.Redirect("index.cshtml"); 
+    }
+}
+
+<div>
+    <h3>Create your dream guy or gal!</h3>
+
+    <form method="post">
+        <fieldset>
+            <input type="text" name="txtFirstName" value="" placeholder="First Name"/>
+            <input type="text" name="txtLastName" value="" placeholder="Last Name"/>
+        </fieldset>
+        <fieldset>
+            <label>Skin Colour</label><br>
+            <label for="option1">
+                <input type="radio" id="dark" name="options" value="1"> Dark
+            </label><br>
+            <label for="option2">
+                <input type="radio" id="light" name="options" value="2"> Light
+            </label><br>
+            <label for="option3">
+                <input type="radio" id="tan" name="options" value="3"> Tan
+            </label>
+        </fieldset>
+        <fieldset>
+            <input placeholder="Age" type="number" min="18" max="100" name="numAge" value="" />
+        </fieldset>
+
+        <button class="funky_text" type="submit" name="btnCreate">Create Character</button>
+    </form>
+</div>

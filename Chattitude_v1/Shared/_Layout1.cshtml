@@ -1,0 +1,25 @@
+﻿
+<!DOCTYPE html>
+<html lang="en-au">
+<head>
+    <meta charset="utf-8" />
+    <title>@Page.Title</title>
+    @RenderSection("head", required: false)
+    <link href="~/css/theme.css" rel="stylesheet" />
+</head>
+    <body>
+        <header>
+            <h1>@Page.Title</h1>
+
+            @RenderPage("~/Shared/_nav.cshtml")
+        </header>
+        
+        <main>
+            @RenderBody()
+        </main>
+
+        <footer>
+            Copyright &copy; @DateTime.Today.Year 
+        </footer>
+    </body>
+</html>

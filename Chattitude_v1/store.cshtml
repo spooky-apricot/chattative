@@ -1,0 +1,40 @@
+﻿@using Chattitude_v1.Code
+@using LibChat
+@{
+    Page.Title = "Store";
+    Layout = "~/Shared/_Layout1.cshtml";
+    PageData["Page"] = EnumPage.store;
+
+    CUser user = (CUser)Session["user"];
+
+    List<string[]> locked_themes = new List<string[]>();
+    locked_themes = user.GetLockedThemes();
+
+    if (IsPost && Request["locked_custom"] != null)
+    {
+        long customID = Request["locked_custom"].AsInt();
+        user.BuyCustom(customID);
+        Response.Redirect("/store.cshtml"); // Actually loads the customs again, on first try.
+    }
+}
+
+<div>
+    <p>Buy customisations!</p>
+</div>
+
+<br><br>
+
+<form method="post">
+    <ul>
+        @foreach (var locTheme in locked_themes) // Populate locked customs...
+        {
+            <li>
+                <button type="submit" name="locked_custom" value="@locTheme[1]">Purchase @locTheme[0]</button>
+            </li>
+        }
+
+    </ul>
+</form>
+
+
+

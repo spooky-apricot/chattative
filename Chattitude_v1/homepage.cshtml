@@ -1,0 +1,130 @@
+﻿@using Chattitude_v1.Code
+@using LibChat
+@using System.Data;
+
+@{
+    Page.Title = "Homepage";
+    Layout = "~/Shared/_Layout1.cshtml";
+    // Page variable to be used on every page, content inside releveant to each page.
+    PageData["Page"] = EnumPage.homepage;
+
+    CUser user = (CUser)Session["user"];
+    if (user == null)
+    {
+        Response.Redirect("/welcome.cshtml");
+    }
+
+    //List<string[]> friends = new List<string[]>();
+    //List<string[]> posts = new List<string[]>();
+
+    //friends = user.FriendsList();
+
+    List<string[]> friendsPosts = user.LoadPosts(false);
+
+
+    if (IsPost && Request["btnPublishPost"] != null)
+    {
+        string postText = Request["txtPost"];
+        user.PublishPost(user.BorderColour, user.BorderWidth, user.BGroundColour,
+                         user.FontStyle, user.FontColour, user.Padding, postText);
+    }
+}
+
+
+<div class="sidebar">
+    <a href="#"><img src="image1.jpg" alt="Image 1"></a>
+    <a href="#"><img src="image2.jpg" alt="Image 2"></a>
+    <a href="#"><img src="image3.jpg" alt="Image 3"></a>
+    <a href="#"><img src="image4.jpg" alt="Image 4"></a>
+</div>
+
+@*BorderColour
+    Colour
+    BGroundColour
+    BorderWidth
+    FontStyle
+    FontColour
+    Padding*@
+
+<div>
+    @if (user.BGroundColour != "") // User has set up custom theme (redirected from customs) Or it's saved to profile.
+    {
+        <form method="post">
+            <p class="user-post-base"
+                style="border: @user.BorderWidth solid @user.BorderColour;
+                color: @user.FontColour; background-color: @user.BGroundColour;
+                padding: @user.Padding;">
+                <input type="text" name="txtPost" value=""
+                        placeholder="what's up?" />
+            </p>
+            <button name="btnPublishPost" type="submit">Publish</button>
+            </form>
+
+    }
+    else // DB function to retreive user's default post theme... AKA last used theme. // Or nothing if they havent made one.
+    {
+        List<string[]>
+        custom = user.SaveCustom(false, "", "", "", "", "", "");
+        foreach (var theme in custom)
+        {
+            user.BorderWidth = theme[0];
+            user.BorderColour = theme[1];
+            user.BGroundColour = theme[2];
+            user.FontStyle = theme[3];
+            user.FontColour = theme[4];
+            user.Padding = theme[5];
+        }
+        <form method="post">
+            <p class="user-post-base"
+                style="border: @user.BorderWidth solid @user.BorderColour;
+                        color: @user.FontColour; background-color: @user.BGroundColour;
+                        padding: @user.Padding;">
+                <input type="text" name="txtPost" value=""
+                        placeholder="what's up?" />
+            </p>
+            <button name="btnPublishPost" type="submit">Publish</button>
+        </form>
+    }
+</div>
+
+
+<div>
+    @*<p class="user-post-default">
+            <input type="text" name="txtPost" value=""
+                   placeholder="what's up?" />
+        </p>
+        }*@
+
+
+
+
+    @foreach (var post in friendsPosts)
+    {
+        <form method="post">
+            <p class="user-post-base"
+               style="border: @post[0] solid @post[1];
+                      background-color: @post[2]; color: @post[4]; 
+                      padding: @post[5]">
+                @post[6]
+                <br/> -@post[7]
+                
+            </p>
+        </form>
+    }
+
+
+
+    <p class="user-post-default">hhhhhhh</p>
+    <p class="user-post-default">hhhhhhh</p>
+    <p class="user-post-default">hhhhhhh</p>
+</div>
+
+
+
+<script>
+
+</script>
+
+
+
+
